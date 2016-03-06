@@ -10,7 +10,7 @@ library(lattice)
 ```
 
 ## Loading and preprocessing the data
-
+<br>
 Unzip the file and then read the resulting .csv file,  
 storing it as the R object 'data':
 
@@ -19,12 +19,13 @@ storing it as the R object 'data':
 file <- unzip('activity.zip')
 data <- read.csv(file)
 ```
-
+<br>
 Convert the 'date' variable (which is stored as a factor) to a date format:
 
 ```r
 data$date<- as.Date(as.character(data$date))
 ```
+<br>
 
 ## What is mean total number of steps taken per day?
 
@@ -89,8 +90,10 @@ hist(spd$steps.per.day,
 Mean<- mean(spd$steps.per.day)
 Median<- median(spd$steps.per.day)
 ```
-Then mean of steps.per.day is **9354.2295082** and the median is **10395**.
-
+Then mean of steps.per.day is **9354.23** and the median is **10395**.
+<br>
+<br>
+    
 ## What is the average daily activity pattern?
 
 Again use ddply() to make another new table, fiveMin, with a row for  
@@ -117,6 +120,9 @@ numNA <- sum(is.na(data))
 ```
 shows us that there are **2304** rows with missing (NA) data.  
 
+<br>
+<br>
+
 In order to impute these missing values we will again use ddply().  The difference between this command and the previous ddply() call is changing 'summarize' to 'transform' which appends the average for each 5-minute interval as a new column.  Then a for-loop iterates through the list and replaces the NAs with the average value for that interval.
 
 ```r
@@ -129,6 +135,9 @@ for( i in 1:nrow(imputedData)){
 imputedData$steps<-round(imputedData$steps,digits=2)
 imputedData<-imputedData[,1:3]
 ```
+
+<br>
+<br>
 
 Now we present a the same commands that produced the histogram for total number of steps, this time with the imputed data:
 
@@ -184,22 +193,19 @@ hist(ispd$steps.per.day,
 ![](PA1_template_files/figure-html/new_hist-1.png)
 
 ```r
-mean(ispd$steps.per.day)
+nMean <- mean(ispd$steps.per.day)
+nMedian <- median(ispd$steps.per.day)
 ```
 
-```
-## [1] 10766.18
-```
+The new mean is **10766.18** and the new median is **10766.13**.
+  
+<br>   
 
-```r
-median(ispd$steps.per.day)
-```
 
-```
-## [1] 10766.13
-```
+It seems that imputing the missing values makes the distribution more normalized, in other words it raises the mean to be more equal to the median.
 
-It seems that imputing the missing values makes the distribution more normalized, raising the mean to equal the median.
+<br>
+<br>
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -219,6 +225,8 @@ imputedData$wkday<-as.factor(imputedData$wkday)
 
 fiveMin2 <- ddply(imputedData,c('interval','wkday'), summarize, Avg.steps = mean(steps))
 ```
+
+<br>
 
 Then we plot using the lattice plotting system.
 
